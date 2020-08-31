@@ -2,10 +2,21 @@ body {
   font-family: 'Inconsolata', monospace;
   background-color:#6c94e7;
   color:aliceblue;
-  font-size:20px; 
-};
-
-/* Modify the text color */
-li {
-    color: tomato;
+  font-size:1.5vw;
 }
+
+ul {
+  list-style-type: circle;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  display:inline;
+}
+
+.text-container {
+  align:left; 
+  
+}
+
