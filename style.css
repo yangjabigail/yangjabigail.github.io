@@ -1,6 +1,6 @@
 body {
   font-family: 'Inconsolata', monospace;
-  background-color:#6c94e7;
+  background-color:#5078df;
   color:aliceblue;
   font-size:1.5vw;
 }
@@ -9,15 +9,20 @@ ul {
   list-style-type: circle;
 }
 
+a {
+  color:#e1daff;
+  text-decoration:none;
+}
+
+a:hover {
+  background-color: #5282e6;
+  color:aliceblue; 
+  text-decoration:none;
+}
+
 .navbar li {
   display:inline;
   color:aliceblue;
-}
-
-.navbar li a:hover {
-  background-color: #606cd1;
-  color:aliceblue;
-  font-size:1.6vw; 
 }
 
 .text-container {
