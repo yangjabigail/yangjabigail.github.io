@@ -11,10 +11,16 @@ ul {
 
 .navbar li {
   display:inline;
+  color:aliceblue;
+}
+
+.navbar li a:hover {
+  background-color: #606cd1;
+  color:aliceblue;
+  font-size:1.6vw; 
 }
 
 .text-container {
   align:left; 
-  
 }
 
