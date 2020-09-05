@@ -9,6 +9,10 @@ ul {
   list-style-type: circle;
 }
 
+li {
+  line-height: 1.5;
+}
+
 a {
   color:#e1daff;
   text-decoration:none;
@@ -18,6 +22,18 @@ a:hover {
   background-color: #5282e6;
   color:aliceblue; 
   text-decoration:none;
+}
+
+div {
+  /*margin:10px 10px 10px 10px;*/
+  /*border-bottom:3px dotted white;*/
+  padding:15px 10vw;
+
+}
+
+.navbar {
+  border-bottom:none;
+  padding:1vw 1vw 1vw;
 }
 
 .navbar li {
