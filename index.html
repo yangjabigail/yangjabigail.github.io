@@ -1,72 +1,85 @@
 <!DOCTYPE html>
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="HandheldFriendly" content="true">
-  <title>Abigail Yang</title>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="HandheldFriendly" content="true">
+    <title>Abigail Yang</title>
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="style.css">
-</head>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
 
-<body> 
-  <!-- NavBar HTML -->
-  <div class="navbar">
-    <ul>
-      <li><a href="index.html">About Me</a></li>
-      <li><a href="projres.html">What I've Done</a></li>
-    </ul>
-  </div>
+  <body> 
+    <!-- NavBar HTML -->
+    <div class="navbar">
+      <ul>
+        <li><a href="index.html">About Me</a></li>
+        <li><a href="projres.html">What I've Done</a></li>
+      </ul>
+    </div>
 
-  <!-- just the header? --> 
-  <center><img src="name_heading.png"></center>
+    <!-- just the header? --> 
+    <center><img src="assets/name_heading.png"></center>
 
-  <!-- Paragraph and contents -->
-  <div class="text-container">
-    <h3>About me</h3>
-    <p>Hi! It's nice to meet you. I'm Abigail, an incoming senior at UCLA. 
-    I study Computer Science and Engineering, and I love finding about how interactive media and technology can create meaningful experiences for people everywhere.
-    During high school and university, I've spent most of my time in education and advising roles, encouraging young students to believe in their own capabilities. 
-    As I start to wrap up my years in college, I hope to find a place to keep growing my technical skills in meaningful ways. </p>
+    <!-- Paragraph and contents -->
+    <div class="text-container">
+      <h3>About me</h3>
+      <p>Hi! It's nice to meet you. I'm Abigail, an incoming senior at UCLA. 
+      I study Computer Science and Engineering, and I love finding about how interactive media and technology can create meaningful experiences for people everywhere.
+      During high school and university, I've spent most of my time in education and advising roles, encouraging young students to believe in their own capabilities. 
+      As I start to wrap up my years in college, I hope to find a place to keep growing my technical skills in meaningful ways. </p>
 
-    <img src="mintpreview.png">
-    <img src="mintpreview.png">
-  </div>
+      <center>
+        <img src="assets/mintpreview.png">
+        <img src="assets/mintpreview.png">
+      </center>
+    </div>
 
-  <!-- Fun facts -->
-  <div class="text-container">
-    <h3>Three fun facts</h3>
-    <ul>
-      <li>I'm a middle sibling!</li>
-      <li>I love learning about deep sea creatures!</li>
-      <li>I like horror concepts, but I'm a scaredy cat!</li>
-    </ul>
-  </div>
+    <!-- Fun facts -->
+    <div class="text-container">
+      <h3>Three fun facts</h3>
+      <ul>
+        <li>I'm a middle sibling!</li>
+        <li>I love learning about deep sea creatures!</li>
+        <li>I like horror concepts, but I'm a scaredy cat!</li>
+      </ul>
+    </div>
 
-  <!-- Contact info and websites --> 
-  <div class="text-container">
-    <h3>Need to reach me?</h3>
-    <h4>Here's my direct contact information!</h4>
-    <ul>
-      <li>Phone: (661) 645-5347</li>
-      <li>Email: ayang99@ucla.edu</li>
-    </ul>
+    <!-- Contact info and websites --> 
+    <div class="text-container">
+      <h3>Need to reach me?</h3>
+      <h4>Here's my direct contact information!</h4>
+      <ul>
+        <li>Phone: (661) 645-5347</li>
+        <li>Email: ayang99@ucla.edu</li>
+      </ul>
 
-    <h4>Here are some other places you can find me!</h4>
-    <ul>
-      <li><a href="https://www.linkedin.com/in/ayang99/">LinkedIn</a></li>
-      <li><a href="https://github.com/yangjabigail">GitHub</a></li>
-      <li><a href="https://www.instagram.com/prayecho_/">Instagram</a></li>
-      <li><a href="https://soundcloud.com/icedrop21">SoundCloud</a></li>
-    </ul>
-  </div>
+      <h4>Here are some other places you can find me!</h4>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/ayang99/">LinkedIn</a></li>
+        <li><a href="https://github.com/yangjabigail">GitHub</a></li>
+        <li><a href="https://www.instagram.com/prayecho_/">Instagram</a></li>
+        <li><a href="https://soundcloud.com/icedrop21">SoundCloud</a></li>
+      </ul>
+    </div>
 
-</body>
+    <!-- The following code embeds a WebGL canvas panel, loads certain scene(s), and displays panel(s) of their controls. //-->
+    <div id="main-canvas" class="canvas-widget"></div>
+    <script type=module >      // ********************* THE ENTRY POINT OF YOUR WHOLE PROGRAM STARTS HERE ********************* 
+       // Indicate which element on the page you want the Canvas_Widget to replace with a 3D WebGL area:
+       const element_to_replace = document.querySelector( "#main-canvas" );
+       import { Main_Scene, Additional_Scenes, Canvas_Widget } from './js/main-scene.js';  // Import the file that defines a scene.
+       const scenes = [ Main_Scene ].map( scene => new scene() );    // This line creates your scene.
+       new Canvas_Widget( element_to_replace, scenes );
+    </script>
+  </body>
+</html>
