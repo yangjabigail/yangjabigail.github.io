@@ -1014,7 +1014,7 @@ class Webgl_Manager
         || w.mozRequestAnimationFrame || w.oRequestAnimationFrame || w.msRequestAnimationFrame
         || function( callback, element ) { w.setTimeout(callback, 1000/60);  } )( window );
     }
-  set_size( dimensions = [ 1080, 600 ] )
+  set_size( dimensions = [ 500, 500 ] )
     {                                   // set_size():  Allows you to re-size the canvas anytime.  To work, it must change the
                                         // size in CSS, wait for style to re-flow, and then change the size again within canvas 
                                         // attributes.  Both are needed because the attributes on a canvas ave a special effect

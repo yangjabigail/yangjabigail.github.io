@@ -21,8 +21,8 @@ class Canvas_Widget
         Object.assign( options, initial_scenes[0].widget_options );
       Object.assign( this, defaults, options )
       
-      const rules = [ ".canvas-widget { width: 1080px; background: rgba(0, 0, 0, 0); display:flex; align:center; }",
-                      ".canvas-widget canvas { width: 1080px; height: 600px; margin-bottom:-3px }" ];
+      const rules = [ ".canvas-widget { width: 500px; background: rgba(0, 0, 0, 0); display:flex; align:center; }",
+                      ".canvas-widget canvas { width: 500px; height: 500px; margin-bottom:-3px; }" ];
                       
       if( document.styleSheets.length == 0 ) document.head.appendChild( document.createElement( "style" ) );
       for( const r of rules ) document.styleSheets[document.styleSheets.length - 1].insertRule( r, 0 )
