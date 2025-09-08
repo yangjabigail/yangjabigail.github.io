@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>blink test</title>
+<style>
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50%     { opacity: 0; }
+  }
+
+  /* obvious visual box so it's easy to see */
+  h1::after {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 12px;
+    background: black;
+    margin-left: 8px;
+    animation: blink 1s step-end infinite;
+    will-change: opacity;
+  }
+</style>
+</head>
+<body>
+  <h1 class="myname">abi yang</h1>
+  <p>Should see a black block blinking after the name.</p>
+</body>
+</html>

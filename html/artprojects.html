@@ -14,19 +14,22 @@
 
 <body>
   <!-- NavBar HTML -->
-  <div class="navbar">
-    <ul>
-      <li><a href="../index.html">About Me</a></li>
-      <li><a href="projres.html">What I've Done</a></li>
-    </ul>
-  </div>
-
-  <!-- just the header? --> 
-  <center><img src="../assets/name_heading.png"></center>
+  <div style="padding: 0px" id="header-placeholder"></div>
+  <script>
+    // Load the header dynamically
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch('../partials/header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header-placeholder').innerHTML = data;
+        });
+    });
+  </script>
 
   <h2>Art Projects</h2>
   <!-- Project 1 -->
   <div class="project-info" id="project1">
+    <img src="../assets/pictures/visart_pics/anniversary_proj.jpg" alt="Art Project 1" style="width: 80%; display: block; margin: 0 auto;">
   </div>
 
   <!-- Project 2 -->

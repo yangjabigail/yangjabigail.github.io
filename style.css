@@ -3,9 +3,9 @@
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
-  background-color:#5078df;
-  color:aliceblue;
+  font-family: 'Menlo', sans-serif;
+  background-color:#81a7bd;
+  color:#dee9ea;
   font-size:1.5vw;
 }
 
@@ -34,6 +34,11 @@ div {
 
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
 .navbar {
   border-bottom:none;
   padding:1vw 1vw 1vw;
@@ -47,7 +52,6 @@ div {
 
 .text-container p {
   padding: 15px 15px; 
-
 }
 
 #about-me {
@@ -59,4 +63,45 @@ div {
   width:max-content;
   box-sizing: border-box;
 
+}
+
+.background-video-wrapper {
+  color: #fff;
+  background: #000;
+  text-align: center;
+  position: relative;
+  video {
+    opacity:.5;
+    background: #000;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+  }
+  .copy {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .myname {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    margin: 2.5vmax 4rem;
+  }
+
+  .myname::after {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 3px;
+    background: rgba(255, 255, 255, 1);
+    margin-left: 2px;
+    animation: blink 1s steps(1, start) infinite;
+    /* will-change: opacity; */
+  }
 }

@@ -19,59 +19,28 @@
   </head>
 
   <body> 
-    <!-- NavBar HTML -->
-    <div class="navbar">
-      <ul>
-        <li><a href="./index.html">About Me</a></li>
-        <li><a href="html/projres.html">What I've Done</a></li>
-      </ul>
-    </div>
-
-    <!-- just the header? --> 
-    <center><img src="assets/name_heading.png"></center>
-
+    <!-- Include the header -->
+    <div style="padding: 0px" id="header-placeholder"></div>
+    <script>
+      // Load the header dynamically
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch('./partials/header.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+          });
+      });
+    </script>
     <!-- Paragraph and contents -->
     <div class="text-container">
-      <h2>About me</h2>
-      <p>Hi! It's nice to meet you. I'm Abigail, an incoming senior at UCLA. 
-      I study Computer Science and Engineering, and I love finding about how interactive media and technology can create meaningful experiences for people everywhere.
-      During high school and university, I've spent most of my time in education and advising roles, encouraging young students to believe in their own capabilities. 
-      As I start to wrap up my years in college, I hope to find a place to keep growing my technical skills in meaningful ways. </p>
-
-      <center>
-        <img src="assets/mintpreview.png">
-        <img src="assets/mintpreview.png">
-      </center>
-    </div>
-
-    <div id="about-me">
-      <!-- Contact info and websites --> 
-      <div class="text-container">
-        <h3>Need to reach me?</h3>
-        <h4>Here's my direct contact information!</h4>
-        <ul>
-          <li>Phone: (661) 645-5347</li>
-          <li>Email: ayang99@ucla.edu</li>
-        </ul>
-
-        <h4>Here are some other places you can find me!</h4>
-        <ul>
-          <li><a href="https://www.linkedin.com/in/ayang99/">LinkedIn</a></li>
-          <li><a href="https://github.com/yangjabigail">GitHub</a></li>
-          <li><a href="https://www.instagram.com/prayecho_/">Instagram</a></li>
-          <li><a href="https://soundcloud.com/icedrop21">SoundCloud</a></li>
-        </ul>
-      </div>
-
-      <!-- Fun facts -->
-      <div class="text-container">
-        <h3>Three fun facts</h3>
-        <ul>
-          <li>I'm a middle sibling!</li>
-          <li>I love learning about deep sea creatures!</li>
-          <li>I like horror concepts, but I'm a scaredy cat!</li>
-        </ul>
-      </div>
+      <h2>Welcome!</h2>
+      <p>Nice to meet you. What's on your mind today?</p>
+      <ul>
+        <li><a href="/html/artprojects.html">Visual Art</a></li>
+        <li>Music</li>
+        <li>Technology</li>
+        <li>Writing</li>
+      </ul>
     </div>
 
     <!-- The following code embeds a WebGL canvas panel, loads certain scene(s), and displays panel(s) of their controls. //-->
