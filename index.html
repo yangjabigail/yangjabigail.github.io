@@ -1,56 +1,451 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="HandheldFriendly" content="true">
-    <title>Abigail Yang</title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abigail Yang</title>
+  <!-- no external font needed; using Menlo from original CSS -->
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    /* ─── TOKENS — your original palette ──────────────────────── */
+    :root {
+      --bg:       #81a7bd;
+      --ink:      #dee9ea;
+      --link:     #e1daff;
+      --hover-bg: #5282e6;
+      --card-bg:  rgba(255,255,255,0.08);
+      --rule:     rgba(222,233,234,0.25);
+      --muted:    rgba(222,233,234,0.65);
+      --font:     'Menlo', 'Courier New', monospace;
+    }
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../style.css">
-  </head>
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-  <body> 
-    <!-- Include the header -->
-    <div style="padding: 0px" id="header-placeholder"></div>
-    <script>
-      // Load the header dynamically
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch('./partials/header.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('header-placeholder').innerHTML = data;
-          });
-      });
-    </script>
-    <!-- Paragraph and contents -->
+    /* ─── RESET ────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--ink);
+      font-size: 1.5vw;
+      min-height: 100vh;
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+    a:hover {
+      background-color: var(--hover-bg);
+      color: aliceblue;
+    }
+    ul { list-style-type: circle; }
+    li { line-height: 1.5; }
+
+    /* ─── LAYOUT ───────────────────────────────────────────────── */
+    .site-wrapper {
+      padding: 15px 10vw;
+    }
+
+    /* ─── HEADER / NAME ────────────────────────────────────────── */
+    .site-header {
+      padding: 2vw 1vw 1vw;
+    }
+    /* ─── NAV ──────────────────────────────────────────────────── */
+    .navbar {
+      padding: 1vw 1vw;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: .5em;
+    }
+    .navbar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    .navbar li {
+      display: inline;
+      padding: 15px 15px;
+      color: aliceblue;
+    }
+    .nav-btn {
+      font-family: var(--font);
+      font-size: 1.5vw;
+      color: var(--link);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .nav-btn:hover {
+      background-color: var(--hover-bg);
+      color: aliceblue;
+    }
+    .nav-btn.active {
+      background-color: var(--hover-bg);
+      color: aliceblue;
+      padding: 2px 4px;
+    }
+
+    /* ─── PANELS ───────────────────────────────────────────────── */
+    .panel { display: none; }
+    .panel.visible { display: block; }
+
+    .text-container {
+      padding: 15px 15px;
+    }
+    .text-container h2 {
+      margin-bottom: .5em;
+    }
+    .text-container p {
+      padding: 15px 15px;
+    }
+    .panel-count {
+      font-size: 1vw;
+      color: var(--muted);
+      margin-left: .8em;
+    }
+
+    /* ─── PROJECT GRID ─────────────────────────────────────────── */
+    .project-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+      margin-bottom: .9rem;
+      background: rgba(0,0,0,0.2);
+    }
+    /* placeholder shown when no image is provided */
+    .project-thumb-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: .9rem;
+      font-size: .75vw;
+      color: var(--muted);
+      letter-spacing: .08em;
+    }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      padding: 1.2rem 1.4rem;
+      transition: background .2s;
+    }
+    .project-card:hover {
+      background: rgba(82,130,230,0.25);
+    }
+    .project-tag {
+      font-size: .8vw;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: .4em;
+    }
+    .project-name {
+      font-size: 1.2vw;
+      font-weight: bold;
+      color: aliceblue;
+      margin-bottom: .4em;
+    }
+    .project-desc {
+      font-size: .95vw;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .project-link {
+      display: inline-block;
+      margin-top: .8em;
+      color: var(--link);
+      font-size: .85vw;
+    }
+    .project-link:hover {
+      background-color: var(--hover-bg);
+      color: aliceblue;
+    }
+
+    /* ─── EMPTY STATE ──────────────────────────────────────────── */
+    .empty-state {
+      color: var(--muted);
+      padding: 1em 0;
+      font-size: 1.1vw;
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 1.5vw 1vw;
+      margin-top: 2vw;
+      font-size: 1vw;
+      color: var(--muted);
+    }
+
+    /* ─── VIDEO BANNER ─────────────────────────────────────────── */
+    .background-video-wrapper {
+      color: #fff;
+      background: #000;
+      text-align: center;
+      position: relative;
+      width: 100vw;
+      margin-left: calc(-10vw);  /* break out of site-wrapper padding */
+      height: 17vw;
+      min-height: 220px;
+      max-height: 520px;
+      overflow: hidden;
+    }
+    .background-video-wrapper video {
+      opacity: .5;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0; left: 0;
+      object-fit: cover;
+    }
+    .background-video-wrapper .fade {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 40%;
+      background: linear-gradient(to bottom, transparent, #81a7bd);
+      z-index: 1;
+    }
+    .background-video-wrapper .copy {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .myname {
+      display: inline-block;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: bold;
+      color: aliceblue;
+      margin: 2.5vmax 4rem;
+    }
+    .myname::after {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 3px;
+      background: rgba(255,255,255,1);
+      margin-left: 2px;
+      animation: blink 1s steps(1, start) infinite;
+      vertical-align: baseline;
+    }
+
+    /* ─── ANIMATIONS ───────────────────────────────────────────── */
+    .fade-up { opacity: 0; animation: fadeUp .6s ease forwards; }
+    .delay-1 { animation-delay: .1s; }
+    .delay-2 { animation-delay: .2s; }
+    .delay-3 { animation-delay: .3s; }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      body { font-size: 3.5vw; }
+      .myname { font-size: 5vw; }
+      .nav-btn { font-size: 3.5vw; }
+      .project-name { font-size: 3vw; }
+      .project-desc { font-size: 2.5vw; }
+      .project-tag  { font-size: 2vw; }
+      .project-link { font-size: 2.5vw; }
+      .project-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="site-wrapper">
+
+  <!-- VIDEO BANNER -->
+  <div class="background-video-wrapper">
+    <video class="background-video" preload="auto" autoplay loop muted playsinline
+           poster="/assets/pictures/newport_beach_poster.png">
+      <source src="https://github.com/yangjabigail/yangjabigail.github.io/raw/refs/heads/master/assets/video/newport_beach_cropped.mp4" type="video/mp4">
+    </video>
+    <div class="fade"></div>
+    <div class="copy">
+      <h1 class="myname">abi yang</h1>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="navbar fade-up delay-1">
+    <ul>
+      <li><button class="nav-btn active" data-target="about">About</button></li>
+      <li><button class="nav-btn" data-target="visual-art">Visual Art</button></li>
+      <li><button class="nav-btn" data-target="music">Music</button></li>
+      <li><button class="nav-btn" data-target="technology">Technology</button></li>
+      <li><button class="nav-btn" data-target="writing">Writing</button></li>
+    </ul>
+  </div>
+
+  <!-- ── ABOUT ── -->
+  <section id="about" class="panel visible fade-up delay-2">
     <div class="text-container">
       <h2>Welcome!</h2>
       <p>Nice to meet you. What's on your mind today?</p>
-      <ul>
-        <li><a href="/html/artprojects.html">Visual Art</a></li>
-        <li>Music</li>
-        <li>Technology</li>
-        <li>Writing</li>
+      <p>I'm Abigail — I make things at the intersection of art, code, and curiosity.
+         This is where I collect the projects I care about.</p>
+      <ul style="padding-left:2em; margin-top:.5em;">
+        <li><a href="https://github.com/yangjabigail" target="_blank" rel="noopener">GitHub</a></li>
+        <!-- <li><a href="mailto:you@example.com">Email</a></li> -->
       </ul>
     </div>
+  </section>
 
-    <!-- The following code embeds a WebGL canvas panel, loads certain scene(s), and displays panel(s) of their controls. //-->
-    <div id="main-canvas" class="canvas-widget"></div>
-    <script type=module >      // ********************* THE ENTRY POINT OF YOUR WHOLE PROGRAM STARTS HERE ********************* 
-       // Indicate which element on the page you want the Canvas_Widget to replace with a 3D WebGL area:
-       const element_to_replace = document.querySelector( "#main-canvas" );
-       import { Main_Scene, Additional_Scenes, Canvas_Widget } from './js/main-scene.js';  // Import the file that defines a scene.
-       const scenes = [ Main_Scene ].map( scene => new scene() );    // This line creates your scene.
-       new Canvas_Widget( element_to_replace, scenes );
-    </script>
-  </body>
+  <!-- ── VISUAL ART ── -->
+  <section id="visual-art" class="panel">
+    <div class="text-container">
+      <h2>Visual Art <span class="panel-count" id="count-visual-art"></span></h2>
+
+    <!--
+      ═══════════════════════════════════════════════════════════
+      HOW TO ADD A PROJECT:
+      Copy one <div class="project-card"> block below and fill in:
+        - data-tag:  short category label (e.g. "p5.js", "Canvas", "SVG")
+        - data-name: project title
+        - data-desc: 1–2 sentence description
+        - data-url:  link to the project (or leave empty)
+      ═══════════════════════════════════════════════════════════
+    -->
+
+      <div class="project-grid" id="grid-visual-art">
+
+        <div class="project-card"
+             data-tag="traditional"
+             data-name="Anniversary Memories"
+             data-desc="A personalized celebration of highlights throughout my friend's relationship."
+             data-url="/html/art/anniversary.html"
+             data-img="/assets/thumbnails/visual-art/anniversary-memories.jpg">
+        </div>
+
+        <!-- Add more cards here! -->
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MUSIC ── -->
+  <section id="music" class="panel">
+    <div class="text-container">
+      <h2>Music <span class="panel-count" id="count-music"></span></h2>
+      <div class="project-grid" id="grid-music">
+        <!-- Add project cards here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TECHNOLOGY ── -->
+  <section id="technology" class="panel">
+    <div class="text-container">
+      <h2>Technology <span class="panel-count" id="count-technology"></span></h2>
+      <div class="project-grid" id="grid-technology">
+        <!-- Add project cards here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WRITING ── -->
+  <section id="writing" class="panel">
+    <div class="text-container">
+      <h2>Writing <span class="panel-count" id="count-writing"></span></h2>
+      <div class="project-grid" id="grid-writing">
+        <!-- Add project cards here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Abigail Yang &nbsp;·&nbsp; yangjabigail.github.io &nbsp;·&nbsp; <span id="footer-year"></span></span>
+  </footer>
+
+</div><!-- /site-wrapper -->
+
+<script>
+  /* ── NAV SWITCHING ── */
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const panels  = document.querySelectorAll('.panel');
+
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      navBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      panels.forEach(p => {
+        p.classList.remove('visible');
+        if (p.id === target) {
+          p.classList.add('visible');
+          // Animate cards in
+          p.querySelectorAll('.project-card').forEach((card, i) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(12px)';
+            setTimeout(() => {
+              card.style.transition = 'opacity .35s ease, transform .35s ease';
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, i * 70);
+          });
+        }
+      });
+    });
+  });
+
+  /* ── RENDER PROJECT CARDS FROM DATA ATTRIBUTES ── */
+  function renderCards() {
+    document.querySelectorAll('.project-grid').forEach(grid => {
+      const cards = grid.querySelectorAll('.project-card[data-name]');
+      const sectionId = grid.id.replace('grid-', '');
+      const countEl = document.getElementById('count-' + sectionId);
+
+      if (cards.length === 0) {
+        grid.innerHTML = `<p class="empty-state">More coming soon —</p>`;
+        if (countEl) countEl.textContent = '';
+        return;
+      }
+
+      if (countEl) countEl.textContent = `${cards.length} project${cards.length > 1 ? 's' : ''}`;
+
+      cards.forEach(card => {
+        const tag  = card.dataset.tag  || '';
+        const name = card.dataset.name || 'Untitled';
+        const desc = card.dataset.desc || '';
+        const url  = card.dataset.url  || '';
+        const img  = card.dataset.img  || '';
+
+        const thumbHtml = img
+          ? `<img class="project-thumb" src="${img}" alt="${name}" loading="lazy" />`
+          : `<div class="project-thumb-placeholder">no preview</div>`;
+
+        card.innerHTML = `
+          ${thumbHtml}
+          ${tag  ? `<p class="project-tag">${tag}</p>` : ''}
+          <p class="project-name">${name}</p>
+          ${desc ? `<p class="project-desc">${desc}</p>` : ''}
+          ${url  ? `<a class="project-link" href="${url}" target="_blank" rel="noopener">View →</a>` : ''}
+        `;
+      });
+    });
+  }
+
+  renderCards();
+
+  /* ── FOOTER YEAR ── */
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+</script>
+</body>
 </html>

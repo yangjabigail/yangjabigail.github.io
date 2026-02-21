@@ -14,24 +14,26 @@
 
 <body>
   <!-- NavBar HTML -->
-  <div class="navbar">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="projres.html">What I've Done</a></li>
-    </ul>
-  </div>
+  <div style="padding: 0px" id="header-placeholder"></div>
+  <script>
+    // Load the header dynamically
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch('/partials/header.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('header-placeholder').innerHTML = data;
+        });
+    });
+  </script>
 
-   <!-- just the header? --> 
-  <center><img src="../assets/name_heading.png"></center>
-
-  <!-- Projects --> 
-  <div id="projects">
+  <!-- Dynamic Content Container -->
+  <div id="content">
     <h2>Projects (under construction!)</h2>
     <p>Here are some of the projects I've worked on at school, with friends, and out of curiosity!<p>
     <ul>
-      <li><a href="devprojects.html">Coding and Dev</a></li>
-      <li><a href="artprojects.html">Art and Design</a></li>
-      <li><a href="musicprojects.html">Music and Writing</a></li>
+      <li><a href="devprojects.html" class="dynamic-link">Coding and Dev</a></li>
+      <li><a href="artprojects.html" class="dynamic-link">Art and Design</a></li>
+      <li><a href="musicprojects.html" class="dynamic-link">Music and Writing</a></li>
     </ul>
     <p>Here is a quick overview of my technical skills:</p>
     <ul>
@@ -41,5 +43,21 @@
       <li>Tried it: LISP, Bash</li>
     </ul>
   </div>
-  
+
+  <script>
+    // Handle dynamic navigation
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll('.dynamic-link').forEach(link => {
+        link.addEventListener('click', function (event) {
+          event.preventDefault(); // Prevent full page reload
+          const url = this.getAttribute('href');
+          fetch(url)
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('content').innerHTML = data;
+            });
+        });
+      });
+    });
+  </script>
 </body>
