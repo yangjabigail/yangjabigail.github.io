@@ -12,7 +12,7 @@
       --bg:       #81a7bd;
       --ink:      #dee9ea;
       --link:     #e1daff;
-      --hover-bg: #5282e6;
+      --hover-bg: #5982b0;
       --card-bg:  rgba(255,255,255,0.08);
       --rule:     rgba(222,233,234,0.25);
       --muted:    rgba(222,233,234,0.65);
@@ -91,6 +91,10 @@
       background-color: var(--hover-bg);
       color: aliceblue;
       padding: 2px 4px;
+      animation: active-animation 1s steps(1, start) infinite;
+    }
+    @keyframes active-animation {
+      50% { background-color: transparent; }
     }
 
     /* ─── PANELS ───────────────────────────────────────────────── */
@@ -178,7 +182,75 @@
       color: aliceblue;
     }
 
-    /* ─── EMPTY STATE ──────────────────────────────────────────── */
+    /* ─── PROJECT DETAIL VIEW ──────────────────────────────────── */
+    .detail-view {
+      display: none;
+      animation: fadeUp .35s ease forwards;
+    }
+    .detail-view.visible {
+      display: block;
+    }
+    .detail-back {
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--link);
+      font-family: var(--font);
+      font-size: 1.1vw;
+      cursor: pointer;
+      padding: .4em .9em;
+      margin-bottom: 1.2rem;
+      display: inline-block;
+      transition: background .2s, color .2s;
+    }
+    .detail-back:hover {
+      background-color: var(--hover-bg);
+      color: aliceblue;
+    }
+    .detail-meta {
+      margin-bottom: 1rem;
+    }
+    .detail-meta .project-tag  { margin-bottom: .3em; }
+    .detail-meta .project-name { font-size: 1.6vw; margin-bottom: .4em; }
+    .detail-meta .project-desc { font-size: 1vw; }
+    .detail-meta .project-link { font-size: .9vw; margin-top: .5em; }
+    .detail-frame-wrap {
+      position: relative;
+      width: 100%;
+      /* 16:9 aspect ratio */
+      padding-top: 56.25%;
+      overflow: hidden;
+    }
+    .detail-frame-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+    .detail-no-embed {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .8em;
+      color: var(--muted);
+      font-size: 1vw;
+      text-align: center;
+      padding: 1em;
+    }
+    .detail-no-embed a {
+      color: var(--link);
+      border-bottom: 1px solid var(--link);
+      padding-bottom: 1px;
+    }
+
+    @media (max-width: 600px) {
+      .detail-back      { font-size: 3vw; }
+      .detail-meta .project-name { font-size: 4vw; }
+      .detail-meta .project-desc { font-size: 3vw; }
+    }
     .empty-state {
       color: var(--muted);
       padding: 1em 0;
@@ -233,7 +305,7 @@
     .myname {
       display: inline-block;
       font-size: clamp(2rem, 5vw, 4rem);
-      font-weight: bold;
+      font-weight: lighter;
       color: aliceblue;
       margin: 2.5vmax 4rem;
     }
@@ -369,6 +441,21 @@
     </div>
   </section>
 
+  <!-- ── PROJECT DETAIL VIEW (shared, injected by JS) ── -->
+  <div id="project-detail" class="detail-view">
+    <div class="text-container">
+      <button class="detail-back" id="detail-back-btn">← Back</button>
+      <div class="detail-meta" id="detail-meta"></div>
+      <div class="detail-frame-wrap">
+        <iframe frameBorder="0" id="detail-iframe" src="" allow="fullscreen"></iframe>
+        <div class="detail-no-embed" id="detail-no-embed" style="display:none;">
+          <span>This page can't be previewed here.</span>
+          <a id="detail-open-link" href="" target="_blank" rel="noopener">Open project in new tab →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <span>Abigail Yang &nbsp;·&nbsp; yangjabigail.github.io &nbsp;·&nbsp; <span id="footer-year"></span></span>
@@ -377,32 +464,114 @@
 </div><!-- /site-wrapper -->
 
 <script>
-  /* ── NAV SWITCHING ── */
-  const navBtns = document.querySelectorAll('.nav-btn');
-  const panels  = document.querySelectorAll('.panel');
+  /* ── STATE ── */
+  let activePanelId = 'about';
 
-  navBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.target;
-      navBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      panels.forEach(p => {
-        p.classList.remove('visible');
-        if (p.id === target) {
-          p.classList.add('visible');
-          // Animate cards in
-          p.querySelectorAll('.project-card').forEach((card, i) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(12px)';
-            setTimeout(() => {
-              card.style.transition = 'opacity .35s ease, transform .35s ease';
-              card.style.opacity = '1';
-              card.style.transform = 'translateY(0)';
-            }, i * 70);
-          });
-        }
+  /* ── HELPERS ── */
+  const $ = id => document.getElementById(id);
+
+  function showPanel(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('visible'));
+    const panel = document.getElementById(id);
+    if (panel) {
+      panel.classList.add('visible');
+      panel.querySelectorAll('.project-card').forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(12px)';
+        setTimeout(() => {
+          card.style.transition = 'opacity .35s ease, transform .35s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, i * 70);
       });
+    }
+    $('project-detail').classList.remove('visible');
+  }
+
+  /* ── NAV SWITCHING ── */
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activePanelId = btn.dataset.target;
+      showPanel(activePanelId);
     });
+  });
+
+  /* ── PROJECT DETAIL VIEW ── */
+  function openDetail(card) {
+    const name = card.dataset.name || 'Untitled';
+    const tag  = card.dataset.tag  || '';
+    const desc = card.dataset.desc || '';
+    const url  = card.dataset.url  || '';
+    const img  = card.dataset.img  || '';
+
+    // Hide current panel, show detail
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('visible'));
+    const detail = $('project-detail');
+    detail.classList.add('visible');
+
+    // Populate meta
+    $('detail-meta').innerHTML = `
+      ${tag  ? `<p class="project-tag">${tag}</p>` : ''}
+      <p class="project-name">${name}</p>
+      ${desc ? `<p class="project-desc">${desc}</p>` : ''}
+      ${url  ? `<a class="project-link" href="${url}" target="_blank" rel="noopener">Open in new tab →</a>` : ''}
+    `;
+
+    // Load iframe
+    const iframe     = $('detail-iframe');
+    const noEmbed    = $('detail-no-embed');
+    const openLink   = $('detail-open-link');
+
+    iframe.style.display = 'block';
+    noEmbed.style.display = 'none';
+
+    if (url) {
+      openLink.href = url;
+      iframe.src = url;
+
+      // If the iframe fails to load (X-Frame-Options etc.), show fallback
+      iframe.onerror = showFallback;
+      // Some pages block silently — detect via load then check
+      iframe.onload = () => {
+        try {
+          // Will throw if cross-origin and blocked
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          if (!doc || doc.URL === 'about:blank') showFallback();
+        } catch(e) {
+          showFallback();
+        }
+      };
+
+      function showFallback() {
+        iframe.style.display = 'none';
+        noEmbed.style.display = 'flex';
+      }
+    } else {
+      // No URL — show thumbnail large or fallback message
+      iframe.style.display = 'none';
+      noEmbed.style.display = 'flex';
+      noEmbed.innerHTML = img
+        ? `<img src="${img}" alt="${name}" style="max-width:100%;max-height:100%;object-fit:contain;" />`
+        : `<span>No preview available.</span>`;
+    }
+
+    // Scroll to top of detail
+    detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function closeDetail() {
+    $('detail-iframe').src = ''; // stop any loading
+    $('project-detail').classList.remove('visible');
+    showPanel(activePanelId);
+  }
+
+  $('detail-back-btn').addEventListener('click', closeDetail);
+
+  // Close on Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && $('project-detail').classList.contains('visible')) closeDetail();
   });
 
   /* ── RENDER PROJECT CARDS FROM DATA ATTRIBUTES ── */
@@ -436,8 +605,11 @@
           ${tag  ? `<p class="project-tag">${tag}</p>` : ''}
           <p class="project-name">${name}</p>
           ${desc ? `<p class="project-desc">${desc}</p>` : ''}
-          ${url  ? `<a class="project-link" href="${url}" target="_blank" rel="noopener">View →</a>` : ''}
         `;
+
+        // Make card clickable
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => openDetail(card));
       });
     });
   }
@@ -445,7 +617,7 @@
   renderCards();
 
   /* ── FOOTER YEAR ── */
-  document.getElementById('footer-year').textContent = new Date().getFullYear();
+  $('footer-year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
