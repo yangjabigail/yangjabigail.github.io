@@ -4,7 +4,7 @@
 
 body {
   font-family: 'Menlo', sans-serif;
-  background-color:#81a7bd;
+  background-color:#719fb8;
   color:#dee9ea;
   font-size:1.5vw;
 }
@@ -104,4 +104,9 @@ div {
     animation: blink 1s steps(1, start) infinite;
     /* will-change: opacity; */
   }
+}
+
+.faded {
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 50%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 50%, transparent 100%);
 }
