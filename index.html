@@ -54,10 +54,6 @@
       padding: 15px 10vw;
     }
 
-    /* ─── HEADER / NAME ────────────────────────────────────────── */
-    .site-header {
-      padding: 2vw 1vw 1vw;
-    }
     /* ─── NAV ──────────────────────────────────────────────────── */
     .navbar {
       padding: 1vw 1vw;
@@ -125,7 +121,6 @@
       margin-bottom: .9rem;
       background: rgba(0,0,0,0.2);
     }
-    /* placeholder shown when no image is provided */
     .project-thumb-placeholder {
       width: 100%;
       aspect-ratio: 16 / 9;
@@ -216,7 +211,6 @@
     .detail-frame-wrap {
       position: relative;
       width: 100%;
-      /* 16:9 aspect ratio */
       padding-top: 56.25%;
       overflow: hidden;
     }
@@ -246,11 +240,7 @@
       padding-bottom: 1px;
     }
 
-    @media (max-width: 600px) {
-      .detail-back      { font-size: 3vw; }
-      .detail-meta .project-name { font-size: 4vw; }
-      .detail-meta .project-desc { font-size: 3vw; }
-    }
+    /* ─── EMPTY STATE ──────────────────────────────────────────── */
     .empty-state {
       color: var(--muted);
       padding: 1em 0;
@@ -273,7 +263,7 @@
       text-align: center;
       position: relative;
       width: 100vw;
-      margin-left: calc(-10vw);  /* break out of site-wrapper padding */
+      margin-left: calc(-10vw);
       height: 17vw;
       min-height: 220px;
       max-height: 520px;
@@ -291,7 +281,7 @@
       position: absolute;
       bottom: 0; left: 0;
       width: 100%; height: 40%;
-      background: linear-gradient(to bottom, transparent, #81a7bd);
+      background: linear-gradient(to bottom, transparent, #719fb8);
       z-index: 1;
     }
     .background-video-wrapper .copy {
@@ -328,14 +318,17 @@
 
     /* ─── RESPONSIVE ───────────────────────────────────────────── */
     @media (max-width: 600px) {
-      body { font-size: 3.5vw; }
-      .myname { font-size: 5vw; }
-      .nav-btn { font-size: 3.5vw; }
+      body          { font-size: 3.5vw; }
+      .myname       { font-size: 5vw; }
+      .nav-btn      { font-size: 3.5vw; }
       .project-name { font-size: 3vw; }
       .project-desc { font-size: 2.5vw; }
       .project-tag  { font-size: 2vw; }
       .project-link { font-size: 2.5vw; }
       .project-grid { grid-template-columns: 1fr; }
+      .detail-back  { font-size: 3vw; }
+      .detail-meta .project-name { font-size: 4vw; }
+      .detail-meta .project-desc { font-size: 3vw; }
     }
   </style>
 </head>
@@ -368,12 +361,12 @@
   <!-- ── ABOUT ── -->
   <section id="about" class="panel visible fade-up delay-2">
     <div class="text-container">
-      <h2>Welcome!</h2>
-      <p>Nice to meet you. What's on your mind today?</p>
-      <p>I'm Abigail — I make things at the intersection of art, code, and curiosity.
-         This is where I collect the projects I care about.</p>
+      <h2>Nice to meet you!</h2>
+      <p>Thanks for visiting my page! Here you can see my most recent reflections and projects.</p>
       <ul style="padding-left:2em; margin-top:.5em;">
-        <li><a href="https://github.com/yangjabigail" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/yangjabigail" target="_blank" rel="noopener">Check out my GitHub!</a></li>
+        <li><a href="https://www.linkedin.com/in/yangjabigail/" target="_blank" rel="noopener">Connect with me on LinkedIn!</a></li>
+        <li><a href="https://www.instagram.com/icedrop21/" target="_blank" rel="noopener">Check out my creative Instagram!</a></li>
         <!-- <li><a href="mailto:you@example.com">Email</a></li> -->
       </ul>
     </div>
@@ -384,16 +377,17 @@
     <div class="text-container">
       <h2>Visual Art <span class="panel-count" id="count-visual-art"></span></h2>
 
-    <!--
-      ═══════════════════════════════════════════════════════════
-      HOW TO ADD A PROJECT:
-      Copy one <div class="project-card"> block below and fill in:
-        - data-tag:  short category label (e.g. "p5.js", "Canvas", "SVG")
-        - data-name: project title
-        - data-desc: 1–2 sentence description
-        - data-url:  link to the project (or leave empty)
-      ═══════════════════════════════════════════════════════════
-    -->
+      <!--
+        ═══════════════════════════════════════════════════════════
+        HOW TO ADD A PROJECT CARD:
+          - data-tag:        short category label (e.g. "p5.js", "Canvas")
+          - data-name:       project title
+          - data-desc:       1–2 sentence description
+          - data-url:        link to the project (leave empty if none)
+          - data-img:        path to thumbnail (leave empty if none)
+          - data-soundcloud: SoundCloud track URL (music cards only)
+        ═══════════════════════════════════════════════════════════
+      -->
 
       <div class="project-grid" id="grid-visual-art">
 
@@ -404,7 +398,6 @@
              data-url="/html/art/anniversary.html"
              data-img="/assets/thumbnails/visual-art/anniversary-memories.jpg">
         </div>
-
         <!-- Add more cards here! -->
 
       </div>
@@ -416,7 +409,17 @@
     <div class="text-container">
       <h2>Music <span class="panel-count" id="count-music"></span></h2>
       <div class="project-grid" id="grid-music">
-        <!-- Add project cards here -->
+
+        <div class="project-card"
+             data-tag="electronic"
+             data-name="SPINOSAD"
+             data-desc="A song about the internal conflict of using pesticides."
+             data-soundcloud="https://soundcloud.com/icedrop21/spinosad"
+             data-img="/assets/thumbnails/music/spinosad.png">
+        </div>
+
+        <!-- Add more cards here! -->
+
       </div>
     </div>
   </section>
@@ -446,8 +449,8 @@
     <div class="text-container">
       <button class="detail-back" id="detail-back-btn">← Back</button>
       <div class="detail-meta" id="detail-meta"></div>
-      <div class="detail-frame-wrap">
-        <iframe frameBorder="0" id="detail-iframe" src="" allow="fullscreen"></iframe>
+      <div class="detail-frame-wrap" id="detail-frame-wrap">
+        <iframe id="detail-iframe" src="" allow="fullscreen"></iframe>
         <div class="detail-no-embed" id="detail-no-embed" style="display:none;">
           <span>This page can't be previewed here.</span>
           <a id="detail-open-link" href="" target="_blank" rel="noopener">Open project in new tab →</a>
@@ -500,86 +503,96 @@
 
   /* ── PROJECT DETAIL VIEW ── */
   function openDetail(card) {
-    const name = card.dataset.name || 'Untitled';
-    const tag  = card.dataset.tag  || '';
-    const desc = card.dataset.desc || '';
-    const url  = card.dataset.url  || '';
-    const img  = card.dataset.img  || '';
+    const name       = card.dataset.name       || 'Untitled';
+    const tag        = card.dataset.tag        || '';
+    const desc       = card.dataset.desc       || '';
+    const url        = card.dataset.url        || '';
+    const img        = card.dataset.img        || '';
+    const soundcloud = card.dataset.soundcloud || '';
 
-    // Hide current panel, show detail
+    // Hide panels, show detail
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('visible'));
     const detail = $('project-detail');
     detail.classList.add('visible');
 
     // Populate meta
+    const linkHtml = url
+      ? `<a class="project-link" href="${url}" target="_blank" rel="noopener">Open in new tab →</a>`
+      : soundcloud
+        ? `<a class="project-link" href="${soundcloud}" target="_blank" rel="noopener">Listen on SoundCloud →</a>`
+        : '';
+
     $('detail-meta').innerHTML = `
       ${tag  ? `<p class="project-tag">${tag}</p>` : ''}
       <p class="project-name">${name}</p>
       ${desc ? `<p class="project-desc">${desc}</p>` : ''}
-      ${url  ? `<a class="project-link" href="${url}" target="_blank" rel="noopener">Open in new tab →</a>` : ''}
+      ${linkHtml}
     `;
 
-    // Load iframe
-    const iframe     = $('detail-iframe');
-    const noEmbed    = $('detail-no-embed');
-    const openLink   = $('detail-open-link');
+    const iframe  = $('detail-iframe');
+    const noEmbed = $('detail-no-embed');
+    const wrap    = $('detail-frame-wrap');
 
-    iframe.style.display = 'block';
+    iframe.style.display  = 'block';
     noEmbed.style.display = 'none';
 
-    if (url) {
-      openLink.href = url;
+    if (soundcloud) {
+      // SoundCloud visual player — fixed tall height
+      wrap.style.paddingTop = '400px';
+      iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(soundcloud)}&color=%235282e6&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true`;
+      iframe.onerror = null;
+      iframe.onload  = null;
+
+    } else if (url) {
+      // Regular project URL — 16:9
+      wrap.style.paddingTop = '56.25%';
+      $('detail-open-link').href = url;
       iframe.src = url;
 
-      // If the iframe fails to load (X-Frame-Options etc.), show fallback
-      iframe.onerror = showFallback;
-      // Some pages block silently — detect via load then check
-      iframe.onload = () => {
-        try {
-          // Will throw if cross-origin and blocked
-          const doc = iframe.contentDocument || iframe.contentWindow.document;
-          if (!doc || doc.URL === 'about:blank') showFallback();
-        } catch(e) {
-          showFallback();
-        }
-      };
-
       function showFallback() {
-        iframe.style.display = 'none';
+        iframe.style.display  = 'none';
         noEmbed.style.display = 'flex';
       }
+      iframe.onerror = showFallback;
+      iframe.onload  = () => {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          if (!doc || doc.URL === 'about:blank') showFallback();
+        } catch(e) { showFallback(); }
+      };
+
     } else {
-      // No URL — show thumbnail large or fallback message
-      iframe.style.display = 'none';
+      // No URL — show thumbnail or message
+      wrap.style.paddingTop = '56.25%';
+      iframe.style.display  = 'none';
       noEmbed.style.display = 'flex';
       noEmbed.innerHTML = img
         ? `<img src="${img}" alt="${name}" style="max-width:100%;max-height:100%;object-fit:contain;" />`
         : `<span>No preview available.</span>`;
     }
 
-    // Scroll to top of detail
     detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function closeDetail() {
-    $('detail-iframe').src = ''; // stop any loading
+    $('detail-iframe').src = '';
+    $('detail-frame-wrap').style.paddingTop = '56.25%';
     $('project-detail').classList.remove('visible');
     showPanel(activePanelId);
   }
 
   $('detail-back-btn').addEventListener('click', closeDetail);
 
-  // Close on Escape key
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && $('project-detail').classList.contains('visible')) closeDetail();
   });
 
-  /* ── RENDER PROJECT CARDS FROM DATA ATTRIBUTES ── */
+  /* ── RENDER PROJECT CARDS ── */
   function renderCards() {
     document.querySelectorAll('.project-grid').forEach(grid => {
-      const cards = grid.querySelectorAll('.project-card[data-name]');
+      const cards     = grid.querySelectorAll('.project-card[data-name]');
       const sectionId = grid.id.replace('grid-', '');
-      const countEl = document.getElementById('count-' + sectionId);
+      const countEl   = document.getElementById('count-' + sectionId);
 
       if (cards.length === 0) {
         grid.innerHTML = `<p class="empty-state">More coming soon —</p>`;
@@ -593,7 +606,6 @@
         const tag  = card.dataset.tag  || '';
         const name = card.dataset.name || 'Untitled';
         const desc = card.dataset.desc || '';
-        const url  = card.dataset.url  || '';
         const img  = card.dataset.img  || '';
 
         const thumbHtml = img
@@ -607,7 +619,6 @@
           ${desc ? `<p class="project-desc">${desc}</p>` : ''}
         `;
 
-        // Make card clickable
         card.style.cursor = 'pointer';
         card.addEventListener('click', () => openDetail(card));
       });
