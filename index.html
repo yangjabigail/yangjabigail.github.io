@@ -240,6 +240,9 @@
       padding-bottom: 1px;
     }
 
+    /* extra content area below embeds */
+    .detail-extra { margin-top: 1rem; color: var(--ink); }
+
     /* ─── EMPTY STATE ──────────────────────────────────────────── */
     .empty-state {
       color: var(--muted);
@@ -364,9 +367,10 @@
       <h2>Nice to meet you!</h2>
       <p>Thanks for visiting my page! Here you can see my most recent reflections and projects.</p>
       <ul style="padding-left:2em; margin-top:.5em;">
-        <li><a href="https://github.com/yangjabigail" target="_blank" rel="noopener">Check out my GitHub!</a></li>
+        
         <li><a href="https://www.linkedin.com/in/yangjabigail/" target="_blank" rel="noopener">Connect with me on LinkedIn!</a></li>
         <li><a href="https://www.instagram.com/icedrop21/" target="_blank" rel="noopener">Check out my creative Instagram!</a></li>
+        <li><a href="https://github.com/yangjabigail" target="_blank" rel="noopener">Check out my GitHub!</a> (Not much on there yet)</li>
         <!-- <li><a href="mailto:you@example.com">Email</a></li> -->
       </ul>
     </div>
@@ -415,6 +419,7 @@
              data-name="SPINOSAD"
              data-desc="A song about the internal conflict of using pesticides."
              data-soundcloud="https://soundcloud.com/icedrop21/spinosad"
+             data-url="/html/music/spinosad.html"
              data-img="/assets/thumbnails/music/spinosad.png">
         </div>
 
@@ -456,6 +461,7 @@
           <a id="detail-open-link" href="" target="_blank" rel="noopener">Open project in new tab →</a>
         </div>
       </div>
+      <div id="detail-extra" class="detail-extra" style="display:none;"></div>
     </div>
   </div>
 
@@ -515,12 +521,11 @@
     const detail = $('project-detail');
     detail.classList.add('visible');
 
-    // Populate meta
-    const linkHtml = url
-      ? `<a class="project-link" href="${url}" target="_blank" rel="noopener">Open in new tab →</a>`
-      : soundcloud
-        ? `<a class="project-link" href="${soundcloud}" target="_blank" rel="noopener">Listen on SoundCloud →</a>`
-        : '';
+    // Populate meta (show both links when both exist; prefer URL for iframe/embed)
+    const linkParts = [];
+    if (url) linkParts.push(`<a class="project-link" href="${url}" target="_blank" rel="noopener">Open in new tab →</a>`);
+    if (soundcloud) linkParts.push(`<a class="project-link" href="${soundcloud}" target="_blank" rel="noopener">Listen on SoundCloud →</a>`);
+    const linkHtml = linkParts.join(' ');
 
     $('detail-meta').innerHTML = `
       ${tag  ? `<p class="project-tag">${tag}</p>` : ''}
@@ -529,17 +534,45 @@
       ${linkHtml}
     `;
 
-    const iframe  = $('detail-iframe');
-    const noEmbed = $('detail-no-embed');
-    const wrap    = $('detail-frame-wrap');
+    const iframe     = $('detail-iframe');
+    const noEmbed    = $('detail-no-embed');
+    const wrap       = $('detail-frame-wrap');
+    const extra      = $('detail-extra');
 
+    // Reset state
     iframe.style.display  = 'block';
     noEmbed.style.display = 'none';
+    wrap.style.paddingTop = '56.25%';
+    iframe.src = '';
+    extra.style.display = 'none';
+    extra.innerHTML = '';
 
+    // If soundcloud exists prefer embedding the visual player. If a project URL also exists,
+    // fetch and show its HTML below the player so both the audio and the page content are visible.
     if (soundcloud) {
-      // SoundCloud visual player — fixed tall height
       wrap.style.paddingTop = '400px';
       iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(soundcloud)}&color=%235282e6&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true`;
+
+      if (url) {
+        // show project content below player by fetching the HTML
+        fetch(url).then(r => r.text()).then(html => {
+          try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            // try to extract the main content; fallback to full body
+            const content = doc.querySelector('.text-container') || doc.body || doc.documentElement;
+            extra.innerHTML = content.innerHTML;
+            extra.style.display = 'block';
+          } catch (e) {
+            extra.innerHTML = `<p><a href="${url}" target="_blank" rel="noopener">Open project in new tab →</a></p>`;
+            extra.style.display = 'block';
+          }
+        }).catch(() => {
+          extra.innerHTML = `<p><a href="${url}" target="_blank" rel="noopener">Open project in new tab →</a></p>`;
+          extra.style.display = 'block';
+        });
+      }
+
       iframe.onerror = null;
       iframe.onload  = null;
 
@@ -550,9 +583,26 @@
       iframe.src = url;
 
       function showFallback() {
-        iframe.style.display  = 'none';
-        noEmbed.style.display = 'flex';
+        // Attempt to fetch the page HTML and inject its main content into the extra area.
+        fetch(url).then(r => r.text()).then(html => {
+          try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const content = doc.querySelector('.text-container') || doc.body || doc.documentElement;
+            extra.innerHTML = content.innerHTML;
+            extra.style.display = 'block';
+            iframe.style.display = 'none';
+            noEmbed.style.display = 'none';
+          } catch (e) {
+            iframe.style.display = 'none';
+            noEmbed.style.display = 'flex';
+          }
+        }).catch(() => {
+          iframe.style.display = 'none';
+          noEmbed.style.display = 'flex';
+        });
       }
+
       iframe.onerror = showFallback;
       iframe.onload  = () => {
         try {
@@ -575,8 +625,12 @@
   }
 
   function closeDetail() {
-    $('detail-iframe').src = '';
+    // Clear iframe and reset aspect ratio
+    const iframe = $('detail-iframe');
+    iframe.src = '';
     $('detail-frame-wrap').style.paddingTop = '56.25%';
+    const extra = $('detail-extra');
+    if (extra) { extra.innerHTML = ''; extra.style.display = 'none'; }
     $('project-detail').classList.remove('visible');
     showPanel(activePanelId);
   }
